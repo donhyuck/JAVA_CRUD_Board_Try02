@@ -30,7 +30,18 @@ public class BoardMain {
 				break;
 
 			} else if (command.equals("article list")) {
+				
+				if (articles.size() == 0) {
+					System.out.println("등록된 게시글이 없습니다.");
+					continue;
+				}
+				// 0 부터 articles의 크기만큼 순회하면서 등록된 게시글의 번호와 제목 출력
 				System.out.println("== 게시글 목록 ==");
+				System.out.println("번호 / 제목 ");
+				for (int i = 0; i < articles.size(); i++) {
+					Article currentArticle = articles.get(i);
+					System.out.printf(" %d / %s\n", currentArticle.id, currentArticle.title);
+				}
 
 			} else if (command.equals("article write")) {
 				System.out.println("== 게시글 작성 ==");
@@ -44,7 +55,7 @@ public class BoardMain {
 				String body = sc.nextLine();
 
 				Article article = new Article(id, title, body);
-				
+
 				articles.add(article);
 
 				System.out.printf("%d번 글이 등록되었습니다.\n", id);
