@@ -59,10 +59,32 @@ public class BoardMain {
 				System.out.printf("%d번 글이 등록되었습니다.\n", id);
 
 			} else if (command.startsWith("article detail ")) {
+
+				String[] commandBits = command.split(" ");
+				int id = Integer.parseInt(commandBits[2]);
+
+				Article foundArticle = null;
+
+				for (int i = 0; i < articles.size(); i++) {
+
+					Article currentArticle = articles.get(i);
+					if (currentArticle.id == id) {
+						foundArticle = currentArticle;
+					}
+				}
+
+				if (foundArticle == null) {
+					System.out.printf("%d번 게시글을 찾을 수 없습니다.\n", id);
+					continue;
+				}
+
 				System.out.println("== 게시글 상세보기 ==");
 
-				// 게시글 번호를 받아서 일치하는 번호 찾고 해당하는 정보를 출력한다.
-				// 공백으로 구분하여 2번 인덱스로 지정된다.
+				System.out.printf("번호 : %d\n", foundArticle.id);
+				System.out.printf("제목 : %s\n", foundArticle.title);
+				System.out.printf("내용 : %s\n", foundArticle.body);
+
+			} else if (command.startsWith("article modify ")) {
 
 				String[] commandBits = command.split(" ");
 				int id = Integer.parseInt(commandBits[2]);
@@ -79,13 +101,23 @@ public class BoardMain {
 
 				// 해당 게시글이 없을 경우
 				if (foundArticle == null) {
-					System.out.printf("입력하신 %d번 게시글을 찾을 수 없습니다.\n", id);
+					System.out.printf("%d번 게시글을 찾을 수 없습니다.\n", id);
 					continue;
 				}
 
-				System.out.printf("번호 : %d\n", foundArticle.id);
-				System.out.printf("제목 : %s\n", foundArticle.title);
-				System.out.printf("내용 : %s\n", foundArticle.body);
+				System.out.println("== 게시글 수정 ==");
+
+				System.out.print("새 제목 : ");
+				String title = sc.nextLine();
+
+				System.out.print("새 내용 : ");
+				String body = sc.nextLine();
+
+				// 입력받은 새 제목, 새 내용을 id에 해당하는 foundArticle 에 넣는다.
+				foundArticle.title = title;
+				foundArticle.body = body;
+
+				System.out.printf("%d번 게시글이 수정되었습니다.\n", id);
 
 			} else {
 				System.out.printf("%s는 존재하지 않는 명령어입니다.\n", command);
