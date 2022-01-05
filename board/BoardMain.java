@@ -7,11 +7,20 @@ import java.util.Scanner;
 import board.util.Util;
 
 public class BoardMain {
+
+	private static List<Article> articles;
+
+	static {
+		articles = new ArrayList<>();
+	}
+
 	public static void main(String[] args) {
 		System.out.println("== 프로그램 시작 ==");
-		Scanner sc = new Scanner(System.in);
 
-		List<Article> articles = new ArrayList<>();
+		// 게시글 테스트 데이터 생성
+		makeTestDate();
+
+		Scanner sc = new Scanner(System.in);
 
 		int lastId = 1;
 
@@ -38,7 +47,7 @@ public class BoardMain {
 
 				System.out.println("== 게시글 목록 ==");
 				System.out.println("번호 /   작성일   / 제목 / 조회수");
-				for (int i = 0; i < articles.size(); i++) {
+				for (int i = articles.size() - 1; i >= 0; i--) {
 					Article currentArticle = articles.get(i);
 					System.out.printf(" %d / %s / %s / %d\n", currentArticle.id, currentArticle.regDate,
 							currentArticle.title, currentArticle.hit);
@@ -140,7 +149,6 @@ public class BoardMain {
 					continue;
 				}
 
-				// 상세보기를 하면 조회수 증가
 				foundArticle.increaseHit();
 
 				System.out.println("== 게시글 상세보기 ==");
@@ -157,5 +165,12 @@ public class BoardMain {
 			}
 
 		}
+	}
+
+	private static void makeTestDate() {
+		articles.add(new Article(1, Util.getCurrentDate(), "test1", "test1", 11));
+		articles.add(new Article(2, Util.getCurrentDate(), "test2", "test2", 21));
+		articles.add(new Article(3, Util.getCurrentDate(), "test3", "test2", 31));
+
 	}
 }
