@@ -37,11 +37,11 @@ public class BoardMain {
 				}
 
 				System.out.println("== 게시글 목록 ==");
-				System.out.println("번호 /   작성일   / 제목 ");
+				System.out.println("번호 /   작성일   / 제목 / 조회수");
 				for (int i = 0; i < articles.size(); i++) {
 					Article currentArticle = articles.get(i);
-					System.out.printf(" %d / %s / %s\n", currentArticle.id, currentArticle.regDate,
-							currentArticle.title);
+					System.out.printf(" %d / %s / %s / %d\n", currentArticle.id, currentArticle.regDate,
+							currentArticle.title, currentArticle.hit);
 				}
 
 			} else if (command.equals("article write")) {
@@ -140,12 +140,16 @@ public class BoardMain {
 					continue;
 				}
 
+				// 상세보기를 하면 조회수 증가
+				foundArticle.increaseHit();
+
 				System.out.println("== 게시글 상세보기 ==");
 
 				System.out.printf("번 호 : %d\n", foundArticle.id);
 				System.out.printf("작성일 : %s\n", foundArticle.regDate);
 				System.out.printf("제 목 : %s\n", foundArticle.title);
 				System.out.printf("내 용 : %s\n", foundArticle.body);
+				System.out.printf("조회수 : %d\n", foundArticle.hit);
 
 			} else {
 				System.out.printf("%s는 존재하지 않는 명령어입니다.\n", command);
