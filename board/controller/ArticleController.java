@@ -11,13 +11,38 @@ public class ArticleController extends Controller {
 
 	private Scanner sc;
 	private List<Article> articles;
+	private String command;
+	private String actionMethodName;
 
 	public ArticleController(Scanner sc, List<Article> articles) {
 		this.sc = sc;
 		this.articles = articles;
 	}
 
-	public void showList(String command) {
+	public void doAction(String command, String actionMethodName) {
+		this.command = command;
+		this.actionMethodName = actionMethodName;
+
+		switch (actionMethodName) {
+		case "list":
+			showList();
+			break;
+		case "write":
+			doWrite();
+			break;
+		case "modify":
+			doModify();
+			break;
+		case "delete":
+			doDelete();
+			break;
+		case "detail":
+			showDetail();
+			break;
+		}
+	}
+
+	public void showList() {
 
 		if (articles.size() == 0) {
 			System.out.println("등록된 게시글이 없습니다.");
@@ -78,7 +103,7 @@ public class ArticleController extends Controller {
 
 	}
 
-	public void doModify(String command) {
+	public void doModify() {
 
 		String[] commandBits = command.split(" ");
 		int id = Integer.parseInt(commandBits[2]);
@@ -105,7 +130,7 @@ public class ArticleController extends Controller {
 
 	}
 
-	public void doDelete(String command) {
+	public void doDelete() {
 
 		String[] commandBits = command.split(" ");
 		int id = Integer.parseInt(commandBits[2]);
@@ -120,6 +145,30 @@ public class ArticleController extends Controller {
 		articles.remove(foundIndex);
 
 		System.out.printf("%d번 게시글이 삭제되었습니다.\n", id);
+
+	}
+
+	public void showDetail() {
+
+		String[] commandBits = command.split(" ");
+		int id = Integer.parseInt(commandBits[2]);
+
+		Article foundArticle = getArticleById(id);
+
+		if (foundArticle == null) {
+			System.out.printf("%d번 게시글을 찾을 수 없습니다.\n", id);
+			return;
+		}
+
+		foundArticle.increaseHit();
+
+		System.out.println("== 게시글 상세보기 ==");
+
+		System.out.printf("번 호 : %d\n", foundArticle.id);
+		System.out.printf("작성일 : %s\n", foundArticle.regDate);
+		System.out.printf("제 목 : %s\n", foundArticle.title);
+		System.out.printf("내 용 : %s\n", foundArticle.body);
+		System.out.printf("조회수 : %d\n", foundArticle.hit);
 
 	}
 
@@ -149,35 +198,10 @@ public class ArticleController extends Controller {
 		return null;
 	}
 
-	public void showDetail(String command) {
-
-		String[] commandBits = command.split(" ");
-		int id = Integer.parseInt(commandBits[2]);
-
-		Article foundArticle = getArticleById(id);
-
-		if (foundArticle == null) {
-			System.out.printf("%d번 게시글을 찾을 수 없습니다.\n", id);
-			return;
-		}
-
-		foundArticle.increaseHit();
-
-		System.out.println("== 게시글 상세보기 ==");
-
-		System.out.printf("번 호 : %d\n", foundArticle.id);
-		System.out.printf("작성일 : %s\n", foundArticle.regDate);
-		System.out.printf("제 목 : %s\n", foundArticle.title);
-		System.out.printf("내 용 : %s\n", foundArticle.body);
-		System.out.printf("조회수 : %d\n", foundArticle.hit);
-
-	}
-
 	public void makeTestData() {
 		System.out.println("테스트를 위한 게시글 데이터를 생성합니다.");
 		articles.add(new Article(1, Util.getCurrentDate(), "test1", "test1", 11));
 		articles.add(new Article(2, Util.getCurrentDate(), "test2", "test2", 21));
 		articles.add(new Article(3, Util.getCurrentDate(), "test3", "test2", 31));
 	}
-
 }

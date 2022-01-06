@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Scanner;
 
 import board.controller.ArticleController;
+import board.controller.Controller;
 import board.controller.MemberController;
 import board.dto.Article;
 import board.dto.Member;
-import board.util.Util;
 
 public class App {
 
@@ -45,36 +45,36 @@ public class App {
 				System.out.println("== 프로그램 종료 ==");
 				break;
 
-			} else if (command.equals("member join")) {
+			}
 
-				memberController.doJoin();
+			String[] commandBits = command.split(" ");
 
-			} else if (command.startsWith("article list")) {
+			if (commandBits.length == 1) {
+				System.out.println("존재하지 않는 명령어입니다.");
+				continue;
+			}
 
-				articleController.showList(command);
+			String controllerName = commandBits[0];
+			String actionMethodName = commandBits[1];
 
-			} else if (command.equals("article write")) {
+			Controller controller = null;
 
-				articleController.doWrite();
+			if (controllerName.equals("article")) {
+				controller = articleController;
 
-			} else if (command.startsWith("article modify ")) {
-
-				articleController.doModify(command);
-
-			} else if (command.startsWith("article delete ")) {
-
-				articleController.doDelete(command);
-
-			} else if (command.startsWith("article detail ")) {
-
-				articleController.showDetail(command);
+			} else if (controllerName.equals("member")) {
+				controller = memberController;
 
 			} else {
 				System.out.printf("%s는 존재하지 않는 명령어입니다.\n", command);
 				continue;
 			}
 
+			controller.doAction(command, actionMethodName);
+
 		}
+
+		sc.close();
 	}
 
 }
