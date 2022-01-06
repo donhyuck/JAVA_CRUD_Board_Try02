@@ -1,6 +1,5 @@
 package board.dto;
 
-// 게시글에 대한 정보를 운반하는 매개체
 public class Article {
 	public int id;
 	public String regDate;

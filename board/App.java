@@ -22,7 +22,8 @@ public class App {
 
 		Scanner sc = new Scanner(System.in);
 
-		int lastId = 1;
+		// 새로운 글을 작성하면 다시 1번 글이 되는 오류가 있다.
+		// => 게시글의 크기에 따라 id를 부여한다.
 
 		while (true) {
 			System.out.print("명령어 : ");
@@ -56,7 +57,7 @@ public class App {
 			} else if (command.equals("article write")) {
 				System.out.println("== 게시글 작성 ==");
 
-				int id = lastId++;
+				int id = articles.size() + 1;
 
 				System.out.print("글 제목 : ");
 				String title = sc.nextLine();
@@ -77,15 +78,7 @@ public class App {
 				String[] commandBits = command.split(" ");
 				int id = Integer.parseInt(commandBits[2]);
 
-				Article foundArticle = null;
-
-				for (int i = 0; i < articles.size(); i++) {
-
-					Article currentArticle = articles.get(i);
-					if (currentArticle.id == id) {
-						foundArticle = currentArticle;
-					}
-				}
+				Article foundArticle = getArticleById(id);
 
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시글을 찾을 수 없습니다.\n", id);
@@ -110,22 +103,14 @@ public class App {
 				String[] commandBits = command.split(" ");
 				int id = Integer.parseInt(commandBits[2]);
 
-				Article foundArticle = null;
+				int foundIndex = getArticleIndexById(id);
 
-				for (int i = 0; i < articles.size(); i++) {
-
-					Article currentArticle = articles.get(i);
-					if (currentArticle.id == id) {
-						foundArticle = currentArticle;
-					}
-				}
-
-				if (foundArticle == null) {
+				if (foundIndex == -1) {
 					System.out.printf("%d번 게시글을 찾을 수 없습니다.\n", id);
 					continue;
 				}
 
-				articles.remove(foundArticle);
+				articles.remove(foundIndex);
 
 				System.out.printf("%d번 게시글이 삭제되었습니다.\n", id);
 
@@ -134,15 +119,7 @@ public class App {
 				String[] commandBits = command.split(" ");
 				int id = Integer.parseInt(commandBits[2]);
 
-				Article foundArticle = null;
-
-				for (int i = 0; i < articles.size(); i++) {
-
-					Article currentArticle = articles.get(i);
-					if (currentArticle.id == id) {
-						foundArticle = currentArticle;
-					}
-				}
+				Article foundArticle = getArticleById(id);
 
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시글을 찾을 수 없습니다.\n", id);
@@ -165,6 +142,42 @@ public class App {
 			}
 
 		}
+	}
+
+	private int getArticleIndexById(int id) {
+
+		int i = 0;
+
+		for (Article article : articles) {
+			if (article.id == id) {
+				return i;
+			}
+
+			i++;
+		}
+
+		// 찾는 게시글이 없는 경우 -1 리턴
+		return -1;
+	}
+
+	private Article getArticleById(int id) {
+
+//		for (int i = 0; i < articles.size(); i++) {
+//
+//			Article article = articles.get(i);
+//
+//			if (article.id == id) {
+//				return article;
+//			}
+//		}
+
+		int index = getArticleIndexById(id);
+
+		if (index != -1) {
+			return articles.get(index);
+		}
+
+		return null;
 	}
 
 	private static void makeTestDate() {
