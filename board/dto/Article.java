@@ -1,11 +1,12 @@
-package board;
+package board.dto;
 
+// 게시글에 대한 정보를 운반하는 매개체
 public class Article {
-	int id;
-	String regDate;
-	String title;
-	String body;
-	int hit;
+	public int id;
+	public String regDate;
+	public String title;
+	public String body;
+	public int hit;
 
 	public Article(int id, String regDate, String title, String body) {
 		this(id, regDate, title, body, 0);
