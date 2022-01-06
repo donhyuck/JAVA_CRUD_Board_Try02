@@ -22,9 +22,6 @@ public class App {
 
 		Scanner sc = new Scanner(System.in);
 
-		// 새로운 글을 작성하면 다시 1번 글이 되는 오류가 있다.
-		// => 게시글의 크기에 따라 id를 부여한다.
-
 		while (true) {
 			System.out.print("명령어 : ");
 			String command = sc.nextLine();
@@ -39,17 +36,48 @@ public class App {
 				System.out.println("== 프로그램 종료 ==");
 				break;
 
-			} else if (command.equals("article list")) {
+			} else if (command.startsWith("article list")) {
 
 				if (articles.size() == 0) {
 					System.out.println("등록된 게시글이 없습니다.");
 					continue;
 				}
 
+				// article list 이후로 입력되는 검색어를 가져온다.
+				String searchKeyword = command.substring("article list".length()).trim();
+
+				List<Article> forListArticles = articles;
+
+				if (searchKeyword.length() > 0) {
+					forListArticles = new ArrayList<>();
+
+					// searchKeyword를 포함하는 article을 찾고
+					// 이를 forListArticles에 넣었다.
+
+					for (Article article : articles) {
+						if (article.title.contains(searchKeyword)) {
+							forListArticles.add(article);
+						}
+					}
+
+					// 포함되는 articles이 없다면 = forListArticles 의 크기가 0 이다.
+					if (forListArticles.size() == 0) {
+						System.out.println("검색결과가 존재하지 않습니다.");
+						continue;
+					}
+
+				}
+
+				// 명령어로 article list ~ 검색어가 추가되면 일련의 과정을 수행하고
+				// 새로 만든 리스트 forListArticles를 출력한다.
+
+				// article list 만 명령하면 전체를 출력한다.
 				System.out.println("== 게시글 목록 ==");
 				System.out.println("번호 /   작성일   / 제목 / 조회수");
-				for (int i = articles.size() - 1; i >= 0; i--) {
-					Article currentArticle = articles.get(i);
+
+				for (int i = forListArticles.size() - 1; i >= 0; i--) {
+
+					Article currentArticle = forListArticles.get(i);
 					System.out.printf(" %d / %s / %s / %d\n", currentArticle.id, currentArticle.regDate,
 							currentArticle.title, currentArticle.hit);
 				}
@@ -156,20 +184,10 @@ public class App {
 			i++;
 		}
 
-		// 찾는 게시글이 없는 경우 -1 리턴
 		return -1;
 	}
 
 	private Article getArticleById(int id) {
-
-//		for (int i = 0; i < articles.size(); i++) {
-//
-//			Article article = articles.get(i);
-//
-//			if (article.id == id) {
-//				return article;
-//			}
-//		}
 
 		int index = getArticleIndexById(id);
 
