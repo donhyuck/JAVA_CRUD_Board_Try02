@@ -26,7 +26,6 @@ public class MemberController {
 			System.out.print("로그인 아이디 : ");
 			loginId = sc.nextLine();
 
-			// 로그인 중복을 막기위함
 			if (isJoinableLoginedId(loginId) == false) {
 				System.out.printf("%s는 이미 사용중인 아이디입니다.\n", loginId);
 				continue;
@@ -34,8 +33,6 @@ public class MemberController {
 
 			break;
 		}
-
-		// 적합한 아이디를 얻음
 
 		String loginPw = null;
 		String loginPwConfirm = null;
