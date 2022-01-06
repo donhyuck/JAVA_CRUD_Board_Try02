@@ -23,13 +23,13 @@ public class App {
 	public void start() {
 		System.out.println("== 프로그램 시작 ==");
 
-		makeTestDate();
-
 		Scanner sc = new Scanner(System.in);
 
-		// ArticleController 구현
 		ArticleController articleController = new ArticleController(sc, articles);
 		MemberController memberController = new MemberController(sc, members);
+
+		articleController.makeTestData();
+		memberController.makeTestData();
 
 		while (true) {
 			System.out.print("명령어 : ");
@@ -75,13 +75,6 @@ public class App {
 			}
 
 		}
-	}
-
-	private static void makeTestDate() {
-		System.out.println("테스트를 위한 게시글 데이터를 생성합니다.");
-		articles.add(new Article(1, Util.getCurrentDate(), "test1", "test1", 11));
-		articles.add(new Article(2, Util.getCurrentDate(), "test2", "test2", 21));
-		articles.add(new Article(3, Util.getCurrentDate(), "test3", "test2", 31));
 	}
 
 }

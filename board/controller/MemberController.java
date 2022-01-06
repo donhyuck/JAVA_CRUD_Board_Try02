@@ -6,7 +6,7 @@ import java.util.Scanner;
 import board.dto.Member;
 import board.util.Util;
 
-public class MemberController {
+public class MemberController extends Controller {
 
 	private Scanner sc;
 	private List<Member> members;
@@ -90,6 +90,13 @@ public class MemberController {
 		}
 
 		return false;
+	}
+
+	public void makeTestData() {
+		System.out.println("테스트를 위한 회원 데이터를 생성합니다.");
+		members.add(new Member(1, Util.getCurrentDate(), "admin", "admin", "관리자"));
+		members.add(new Member(2, Util.getCurrentDate(), "test1", "test1", "홍길동"));
+		members.add(new Member(3, Util.getCurrentDate(), "test2", "test2", "성춘향"));
 	}
 
 }

@@ -7,7 +7,7 @@ import java.util.Scanner;
 import board.dto.Article;
 import board.util.Util;
 
-public class ArticleController {
+public class ArticleController extends Controller {
 
 	private Scanner sc;
 	private List<Article> articles;
@@ -171,6 +171,13 @@ public class ArticleController {
 		System.out.printf("내 용 : %s\n", foundArticle.body);
 		System.out.printf("조회수 : %d\n", foundArticle.hit);
 
+	}
+
+	public void makeTestData() {
+		System.out.println("테스트를 위한 게시글 데이터를 생성합니다.");
+		articles.add(new Article(1, Util.getCurrentDate(), "test1", "test1", 11));
+		articles.add(new Article(2, Util.getCurrentDate(), "test2", "test2", 21));
+		articles.add(new Article(3, Util.getCurrentDate(), "test3", "test2", 31));
 	}
 
 }
