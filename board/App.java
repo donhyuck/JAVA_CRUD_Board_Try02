@@ -1,32 +1,20 @@
 package board;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import board.controller.ArticleController;
 import board.controller.Controller;
 import board.controller.MemberController;
-import board.dto.Article;
-import board.dto.Member;
 
 public class App {
-
-	private static List<Article> articles;
-	private static List<Member> members;
-
-	App() {
-		articles = new ArrayList<>();
-		members = new ArrayList<>();
-	}
 
 	public void start() {
 		System.out.println("== 프로그램 시작 ==");
 
 		Scanner sc = new Scanner(System.in);
 
-		ArticleController articleController = new ArticleController(sc, articles);
-		MemberController memberController = new MemberController(sc, members);
+		ArticleController articleController = new ArticleController(sc);
+		MemberController memberController = new MemberController(sc);
 
 		articleController.makeTestData();
 		memberController.makeTestData();
@@ -44,7 +32,6 @@ public class App {
 			if (command.equals("system exit")) {
 				System.out.println("== 프로그램 종료 ==");
 				break;
-
 			}
 
 			String[] commandBits = command.split(" ");
