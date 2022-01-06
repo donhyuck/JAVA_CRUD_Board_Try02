@@ -5,14 +5,17 @@ import java.util.List;
 import java.util.Scanner;
 
 import board.dto.Article;
+import board.dto.Member;
 import board.util.Util;
 
 public class App {
 
 	private static List<Article> articles;
+	private static List<Member> members;
 
 	App() {
 		articles = new ArrayList<>();
+		members = new ArrayList<>();
 	}
 
 	public void start() {
@@ -36,6 +39,58 @@ public class App {
 				System.out.println("== 프로그램 종료 ==");
 				break;
 
+			} else if (command.equals("member join")) {
+				System.out.println("== 회원 가입 ==");
+
+				String loginId = null;
+
+				while (true) {
+					System.out.print("로그인 아이디 : ");
+					loginId = sc.nextLine();
+
+					// 로그인 중복을 막기위함
+					if (isJoinableLoginedId(loginId) == false) {
+						System.out.printf("%s는 이미 사용중인 아이디입니다.\n", loginId);
+						continue;
+					}
+
+					break;
+				}
+
+				// 적합한 아이디를 얻음
+
+				String loginPw = null;
+				String loginPwConfirm = null;
+
+				while (true) {
+					System.out.print("로그인 비밀번호 : ");
+					loginPw = sc.nextLine();
+
+					System.out.print("로그인 비밀번호 확인 : ");
+					loginPwConfirm = sc.nextLine();
+
+					// 비밀번호 확인과 일치하지 않는 경우
+					if (loginPwConfirm.equals(loginPw) == false) {
+						System.out.println("비밀번호를 다시입력해주세요.");
+						continue;
+					}
+
+					// 비밀번호 일치
+					break;
+				}
+
+				System.out.print("이름 : ");
+				String name = sc.nextLine();
+
+				// 로그인 아이디와 적합한 비밀번호를 얻음
+				int id = members.size() + 1;
+				String regDate = Util.getCurrentDate();
+
+				Member member = new Member(id, regDate, loginId, loginPw, name);
+				members.add(member);
+
+				System.out.printf("%s님 회원가입이 완료되었습니다.\n", name);
+
 			} else if (command.startsWith("article list")) {
 
 				if (articles.size() == 0) {
@@ -43,7 +98,6 @@ public class App {
 					continue;
 				}
 
-				// article list 이후로 입력되는 검색어를 가져온다.
 				String searchKeyword = command.substring("article list".length()).trim();
 
 				List<Article> forListArticles = articles;
@@ -51,16 +105,12 @@ public class App {
 				if (searchKeyword.length() > 0) {
 					forListArticles = new ArrayList<>();
 
-					// searchKeyword를 포함하는 article을 찾고
-					// 이를 forListArticles에 넣었다.
-
 					for (Article article : articles) {
 						if (article.title.contains(searchKeyword)) {
 							forListArticles.add(article);
 						}
 					}
 
-					// 포함되는 articles이 없다면 = forListArticles 의 크기가 0 이다.
 					if (forListArticles.size() == 0) {
 						System.out.println("검색결과가 존재하지 않습니다.");
 						continue;
@@ -68,10 +118,6 @@ public class App {
 
 				}
 
-				// 명령어로 article list ~ 검색어가 추가되면 일련의 과정을 수행하고
-				// 새로 만든 리스트 forListArticles를 출력한다.
-
-				// article list 만 명령하면 전체를 출력한다.
 				System.out.println("== 게시글 목록 ==");
 				System.out.println("번호 /   작성일   / 제목 / 조회수");
 
@@ -170,6 +216,37 @@ public class App {
 			}
 
 		}
+	}
+
+	// loginId 와 일치하는 번호를 찾는다.
+	// 일치하는 게 없다면 = -1
+
+	private int getMemberIndexByLoginId(String loginId) {
+
+		int i = 0;
+
+		for (Member member : members) {
+
+			if (member.loginId.equals(loginId)) {
+				return i;
+			}
+
+			i++;
+		}
+
+		return -1;
+	}
+
+	// 중복된 아이디가 없으므로 회원가입이 가능하다.
+	private boolean isJoinableLoginedId(String loginId) {
+
+		int index = getMemberIndexByLoginId(loginId);
+
+		if (index == -1) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private int getArticleIndexById(int id) {
