@@ -31,10 +31,26 @@ public class MemberController extends Controller {
 		case "login":
 			doLogin();
 			break;
+		case "whoami":
+			showWhoAmI();
+			break;
 		default:
 			System.out.println("존재하지 않는 명령어입니다.");
 			break;
 		}
+
+	}
+
+	private void showWhoAmI() {
+
+		if (loginedMember == null) {
+			System.out.println("로그아웃 상태입니다.");
+			return;
+		}
+
+		System.out.println("== 현재 상태보기 ==");
+		System.out.printf("로그인 아이디 : %s\n", loginedMember.loginId);
+		System.out.printf("이름 : %s\n", loginedMember.name);
 
 	}
 
@@ -67,9 +83,6 @@ public class MemberController extends Controller {
 		System.out.print("로그인 비밀번호 : ");
 		String loginPw = sc.nextLine();
 
-		// 비밀번호 확인
-		// 로그인 아이디로 불러온 회원의 비밀번호와
-		// 입력한 비밀번호를 비교한다.
 		if (member.loginPw.equals(loginPw) == false) {
 			System.out.println("비밀번호를 확인해주세요.");
 			return;
@@ -155,9 +168,6 @@ public class MemberController extends Controller {
 
 		return false;
 	}
-
-	// 로그인 아이디에 해당하는 번호를 받고
-	// 이를 회원 정보에 넣는다.
 
 	private Member getMemberByLoginId(String loginId) {
 
