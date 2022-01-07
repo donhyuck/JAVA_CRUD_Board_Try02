@@ -13,6 +13,7 @@ public class MemberController extends Controller {
 	private List<Member> members;
 	private String command;
 	private String actionMethodName;
+	private Member loginedMember;
 
 	public MemberController(Scanner sc) {
 		this.sc = sc;
@@ -27,7 +28,55 @@ public class MemberController extends Controller {
 		case "join":
 			doJoin();
 			break;
+		case "login":
+			doLogin();
+			break;
+		default:
+			System.out.println("존재하지 않는 명령어입니다.");
+			break;
 		}
+
+	}
+
+	private void doLogin() {
+		System.out.println("== 회원 로그인 ==");
+
+		Member member;
+		int blockCnt = 0;
+
+		while (true) {
+
+			System.out.print("로그인 아이디 : ");
+			String loginId = sc.nextLine();
+
+			member = getMemberByLoginId(loginId);
+
+			if (member == null) {
+				System.out.println("해당 회원의 가입정보가 없습니다.");
+				blockCnt++;
+
+				if (blockCnt > 3) {
+					System.out.println("입력횟수가 초과되었습니다.");
+					return;
+				}
+				continue;
+			}
+			break;
+		}
+
+		System.out.print("로그인 비밀번호 : ");
+		String loginPw = sc.nextLine();
+
+		// 비밀번호 확인
+		// 로그인 아이디로 불러온 회원의 비밀번호와
+		// 입력한 비밀번호를 비교한다.
+		if (member.loginPw.equals(loginPw) == false) {
+			System.out.println("비밀번호를 확인해주세요.");
+			return;
+		}
+
+		loginedMember = member;
+		System.out.printf("%s님 로그인되었습니다.\n", loginedMember.name);
 
 	}
 
@@ -105,6 +154,20 @@ public class MemberController extends Controller {
 		}
 
 		return false;
+	}
+
+	// 로그인 아이디에 해당하는 번호를 받고
+	// 이를 회원 정보에 넣는다.
+
+	private Member getMemberByLoginId(String loginId) {
+
+		int index = getMemberIndexByLoginId(loginId);
+
+		if (index == -1) {
+			return null;
+		}
+
+		return members.get(index);
 	}
 
 	public void makeTestData() {
