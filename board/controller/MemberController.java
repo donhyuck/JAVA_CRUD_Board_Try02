@@ -31,6 +31,9 @@ public class MemberController extends Controller {
 		case "login":
 			doLogin();
 			break;
+		case "logout":
+			doLogout();
+			break;
 		case "whoami":
 			showWhoAmI();
 			break;
@@ -38,6 +41,18 @@ public class MemberController extends Controller {
 			System.out.println("존재하지 않는 명령어입니다.");
 			break;
 		}
+
+	}
+
+	private void doLogout() {
+
+		if (isLogined() == false) {
+			System.out.println("이미 로그아웃되었습니다.");
+			return;
+		}
+
+		System.out.printf("%s님 로그아웃되었습니다.\n", loginedMember.name);
+		loginedMember = null;
 
 	}
 
@@ -140,6 +155,11 @@ public class MemberController extends Controller {
 
 		System.out.printf("%s님 회원가입이 완료되었습니다.\n", name);
 
+	}
+
+	private boolean isLogined() {
+
+		return loginedMember != null;
 	}
 
 	private int getMemberIndexByLoginId(String loginId) {
