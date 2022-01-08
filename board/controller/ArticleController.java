@@ -130,6 +130,11 @@ public class ArticleController extends Controller {
 			return;
 		}
 
+		if (foundArticle.memberId != loginedMember.id) {
+			System.out.println("해당 게시글에 대한 귄한이 없습니다.");
+			return;
+		}
+
 		System.out.println("== 게시글 수정 ==");
 
 		System.out.print("새 제목 : ");
@@ -150,14 +155,20 @@ public class ArticleController extends Controller {
 		String[] commandBits = command.split(" ");
 		int id = Integer.parseInt(commandBits[2]);
 
-		int foundIndex = getArticleIndexById(id);
+		Article foundArticle = getArticleById(id);
 
-		if (foundIndex == -1) {
+		if (foundArticle == null) {
 			System.out.printf("%d번 게시글을 찾을 수 없습니다.\n", id);
 			return;
 		}
 
-		articles.remove(foundIndex);
+		// 명령어를 받고 로그인 체크를 수행했었음
+		if (foundArticle.memberId != loginedMember.id) {
+			System.out.println("해당 게시글에 대한 귄한이 없습니다.");
+			return;
+		}
+
+		articles.remove(foundArticle);
 
 		System.out.printf("%d번 게시글이 삭제되었습니다.\n", id);
 
