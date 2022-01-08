@@ -28,12 +28,24 @@ public class ArticleController extends Controller {
 			showList();
 			break;
 		case "write":
+			if (isLogined() == false) {
+				System.out.println("로그인 후 이용해주세요.");
+				return;
+			}
 			doWrite();
 			break;
 		case "modify":
+			if (isLogined() == false) {
+				System.out.println("로그인 후 이용해주세요.");
+				return;
+			}
 			doModify();
 			break;
 		case "delete":
+			if (isLogined() == false) {
+				System.out.println("로그인 후 이용해주세요.");
+				return;
+			}
 			doDelete();
 			break;
 		case "detail":
@@ -73,13 +85,13 @@ public class ArticleController extends Controller {
 		}
 
 		System.out.println("== 게시글 목록 ==");
-		System.out.println("번호 /   작성일   / 제목 / 조회수");
+		System.out.println("번호 /   작성일   / 작성자 / 제목 / 조회수");
 
 		for (int i = forListArticles.size() - 1; i >= 0; i--) {
 
 			Article currentArticle = forListArticles.get(i);
-			System.out.printf(" %d / %s / %s / %d\n", currentArticle.id, currentArticle.regDate, currentArticle.title,
-					currentArticle.hit);
+			System.out.printf(" %d / %s / %d / %s / %d\n", currentArticle.id, currentArticle.regDate,
+					currentArticle.memberId, currentArticle.title, currentArticle.hit);
 		}
 
 	}
@@ -98,7 +110,7 @@ public class ArticleController extends Controller {
 
 		String regDate = Util.getCurrentDate();
 
-		Article article = new Article(id, regDate, title, body);
+		Article article = new Article(id, regDate, loginedMember.id, title, body);
 
 		articles.add(article);
 
@@ -169,6 +181,7 @@ public class ArticleController extends Controller {
 
 		System.out.printf("번 호 : %d\n", foundArticle.id);
 		System.out.printf("작성일 : %s\n", foundArticle.regDate);
+		System.out.printf("작성자 : %d\n", foundArticle.memberId);
 		System.out.printf("제 목 : %s\n", foundArticle.title);
 		System.out.printf("내 용 : %s\n", foundArticle.body);
 		System.out.printf("조회수 : %d\n", foundArticle.hit);
@@ -203,8 +216,8 @@ public class ArticleController extends Controller {
 
 	public void makeTestData() {
 		System.out.println("테스트를 위한 게시글 데이터를 생성합니다.");
-		articles.add(new Article(1, Util.getCurrentDate(), "test1", "test1", 11));
-		articles.add(new Article(2, Util.getCurrentDate(), "test2", "test2", 21));
-		articles.add(new Article(3, Util.getCurrentDate(), "test3", "test2", 31));
+		articles.add(new Article(1, Util.getCurrentDate(), 1, "test1", "test1", 11));
+		articles.add(new Article(2, Util.getCurrentDate(), 2, "test2", "test2", 21));
+		articles.add(new Article(3, Util.getCurrentDate(), 3, "test3", "test2", 31));
 	}
 }

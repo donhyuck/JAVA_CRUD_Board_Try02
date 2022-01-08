@@ -13,7 +13,6 @@ public class MemberController extends Controller {
 	private List<Member> members;
 	private String command;
 	private String actionMethodName;
-	private Member loginedMember;
 
 	public MemberController(Scanner sc) {
 		this.sc = sc;
@@ -70,6 +69,12 @@ public class MemberController extends Controller {
 	}
 
 	private void doLogin() {
+
+		if (isLogined() == true) {
+			System.out.println("이미 로그인되었습니다.");
+			return;
+		}
+
 		System.out.println("== 회원 로그인 ==");
 
 		Member member;
@@ -155,11 +160,6 @@ public class MemberController extends Controller {
 
 		System.out.printf("%s님 회원가입이 완료되었습니다.\n", name);
 
-	}
-
-	private boolean isLogined() {
-
-		return loginedMember != null;
 	}
 
 	private int getMemberIndexByLoginId(String loginId) {
