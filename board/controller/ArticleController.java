@@ -28,24 +28,12 @@ public class ArticleController extends Controller {
 			showList();
 			break;
 		case "write":
-			if (isLogined() == false) {
-				System.out.println("로그인 후 이용해주세요.");
-				return;
-			}
 			doWrite();
 			break;
 		case "modify":
-			if (isLogined() == false) {
-				System.out.println("로그인 후 이용해주세요.");
-				return;
-			}
 			doModify();
 			break;
 		case "delete":
-			if (isLogined() == false) {
-				System.out.println("로그인 후 이용해주세요.");
-				return;
-			}
 			doDelete();
 			break;
 		case "detail":
@@ -162,7 +150,6 @@ public class ArticleController extends Controller {
 			return;
 		}
 
-		// 명령어를 받고 로그인 체크를 수행했었음
 		if (foundArticle.memberId != loginedMember.id) {
 			System.out.println("해당 게시글에 대한 귄한이 없습니다.");
 			return;

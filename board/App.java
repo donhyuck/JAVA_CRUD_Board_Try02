@@ -57,6 +57,31 @@ public class App {
 				continue;
 			}
 
+			// 로그인, 로그아웃 체크를 명령어를 받으면서 수행한다.
+			String actionName = controllerName + "/" + actionMethodName;
+
+			switch (actionName) {
+			case "article/write":
+			case "article/delete":
+			case "article/modify":
+			case "member/logout":
+				if (Controller.isLogined() == false) {
+					System.out.println("로그인 후 이용해주세요.");
+					continue;
+				}
+				break;
+			}
+
+			switch (actionName) {
+			case "member/join":
+			case "member/login":
+				if (Controller.isLogined() == true) {
+					System.out.println("로그아웃 후 이용해주세요.");
+					continue;
+				}
+				break;
+			}
+
 			controller.doAction(command, actionMethodName);
 
 		}

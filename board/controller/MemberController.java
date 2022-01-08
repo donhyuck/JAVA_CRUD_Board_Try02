@@ -45,11 +45,6 @@ public class MemberController extends Controller {
 
 	private void doLogout() {
 
-		if (isLogined() == false) {
-			System.out.println("이미 로그아웃되었습니다.");
-			return;
-		}
-
 		System.out.printf("%s님 로그아웃되었습니다.\n", loginedMember.name);
 		loginedMember = null;
 
@@ -70,20 +65,17 @@ public class MemberController extends Controller {
 
 	private void doLogin() {
 
-		if (isLogined() == true) {
-			System.out.println("이미 로그인되었습니다.");
-			return;
-		}
-
 		System.out.println("== 회원 로그인 ==");
 
+		String loginId;
+		String loginPw;
 		Member member;
 		int blockCnt = 0;
 
 		while (true) {
 
 			System.out.print("로그인 아이디 : ");
-			String loginId = sc.nextLine();
+			loginId = sc.nextLine();
 
 			member = getMemberByLoginId(loginId);
 
@@ -100,12 +92,23 @@ public class MemberController extends Controller {
 			break;
 		}
 
-		System.out.print("로그인 비밀번호 : ");
-		String loginPw = sc.nextLine();
+		blockCnt = 0;
+		while (true) {
+			System.out.print("로그인 비밀번호 : ");
+			loginPw = sc.nextLine();
 
-		if (member.loginPw.equals(loginPw) == false) {
-			System.out.println("비밀번호를 확인해주세요.");
-			return;
+			if (member.loginPw.equals(loginPw) == false) {
+				System.out.println("비밀번호를 확인해주세요.");
+				blockCnt++;
+
+				if (blockCnt > 3) {
+					System.out.println("입력횟수가 초과되었습니다.");
+					return;
+				}
+				continue;
+			}
+
+			break;
 		}
 
 		loginedMember = member;
@@ -118,13 +121,25 @@ public class MemberController extends Controller {
 		System.out.println("== 회원 가입 ==");
 
 		String loginId = null;
+		int blockCnt = 0;
 
 		while (true) {
 			System.out.print("로그인 아이디 : ");
 			loginId = sc.nextLine();
 
+			if (loginId.length() == 0) {
+				continue;
+			}
+
 			if (isJoinableLoginedId(loginId) == false) {
 				System.out.printf("%s는 이미 사용중인 아이디입니다.\n", loginId);
+				blockCnt++;
+
+				if (blockCnt > 3) {
+					System.out.println("입력횟수가 초과되었습니다.");
+					return;
+				}
+
 				continue;
 			}
 
@@ -133,24 +148,45 @@ public class MemberController extends Controller {
 
 		String loginPw = null;
 		String loginPwConfirm = null;
+		blockCnt = 0;
 
 		while (true) {
 			System.out.print("로그인 비밀번호 : ");
 			loginPw = sc.nextLine();
+
+			if (loginPw.length() == 0) {
+				continue;
+			}
 
 			System.out.print("로그인 비밀번호 확인 : ");
 			loginPwConfirm = sc.nextLine();
 
 			if (loginPwConfirm.equals(loginPw) == false) {
 				System.out.println("비밀번호를 다시입력해주세요.");
+				blockCnt++;
+
+				if (blockCnt > 3) {
+					System.out.println("입력횟수가 초과되었습니다.");
+					return;
+				}
+
 				continue;
 			}
 
 			break;
 		}
 
-		System.out.print("이름 : ");
-		String name = sc.nextLine();
+		String name;
+		while (true) {
+			System.out.print("이름 : ");
+			name = sc.nextLine();
+
+			if (name.length() == 0) {
+				continue;
+			}
+
+			break;
+		}
 
 		int id = members.size() + 1;
 		String regDate = Util.getCurrentDate();
