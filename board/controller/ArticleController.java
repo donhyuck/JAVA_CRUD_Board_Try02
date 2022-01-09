@@ -1,24 +1,24 @@
 package board.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import board.container.Container;
 import board.dto.Article;
 import board.dto.Member;
+import board.service.ArticleService;
 import board.util.Util;
 
 public class ArticleController extends Controller {
 
 	private Scanner sc;
-	private List<Article> articles;
 	private String command;
 	private String actionMethodName;
+	private ArticleService articleService;
 
 	public ArticleController(Scanner sc) {
 		this.sc = sc;
-		articles = Container.articleDao.articles;
+		articleService = Container.articleService;
 	}
 
 	public void doAction(String command, String actionMethodName) {
@@ -49,37 +49,21 @@ public class ArticleController extends Controller {
 
 	private void showList() {
 
-		if (articles.size() == 0) {
-			System.out.println("등록된 게시글이 없습니다.");
-			return;
-		}
-
 		String searchKeyword = command.substring("article list".length()).trim();
 
-		List<Article> forListArticles = articles;
+		List<Article> forPrintArticles = articleService.getForPrintArticles(searchKeyword);
 
-		if (searchKeyword.length() > 0) {
-			forListArticles = new ArrayList<>();
-
-			for (Article article : articles) {
-				if (article.title.contains(searchKeyword)) {
-					forListArticles.add(article);
-				}
-			}
-
-			if (forListArticles.size() == 0) {
-				System.out.println("검색결과가 존재하지 않습니다.");
-				return;
-			}
-
+		if (forPrintArticles.size() == 0) {
+			System.out.println("검색결과가 존재하지 않습니다.");
+			return;
 		}
 
 		System.out.println("== 게시글 목록 ==");
 		System.out.println("번호 /   작성일   / 작성자 / 제목 / 조회수");
 
-		for (int i = forListArticles.size() - 1; i >= 0; i--) {
+		for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
 
-			Article currentArticle = forListArticles.get(i);
+			Article currentArticle = forPrintArticles.get(i);
 
 			String writerName = null;
 
@@ -102,7 +86,7 @@ public class ArticleController extends Controller {
 
 		System.out.println("== 게시글 작성 ==");
 
-		int id = Container.articleDao.getNewId();
+		int id = articleService.getNewId();
 
 		System.out.print("글 제목 : ");
 		String title = sc.nextLine();
@@ -114,7 +98,7 @@ public class ArticleController extends Controller {
 
 		Article article = new Article(id, regDate, loginedMember.id, title, body);
 
-		Container.articleDao.add(article);
+		articleService.add(article);
 
 		System.out.printf("%d번 글이 등록되었습니다.\n", id);
 
@@ -125,7 +109,7 @@ public class ArticleController extends Controller {
 		String[] commandBits = command.split(" ");
 		int id = Integer.parseInt(commandBits[2]);
 
-		Article foundArticle = getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 
 		if (foundArticle == null) {
 			System.out.printf("%d번 게시글을 찾을 수 없습니다.\n", id);
@@ -157,7 +141,7 @@ public class ArticleController extends Controller {
 		String[] commandBits = command.split(" ");
 		int id = Integer.parseInt(commandBits[2]);
 
-		Article foundArticle = getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 
 		if (foundArticle == null) {
 			System.out.printf("%d번 게시글을 찾을 수 없습니다.\n", id);
@@ -169,7 +153,7 @@ public class ArticleController extends Controller {
 			return;
 		}
 
-		articles.remove(foundArticle);
+		articleService.remove(foundArticle);
 
 		System.out.printf("%d번 게시글이 삭제되었습니다.\n", id);
 
@@ -180,7 +164,7 @@ public class ArticleController extends Controller {
 		String[] commandBits = command.split(" ");
 		int id = Integer.parseInt(commandBits[2]);
 
-		Article foundArticle = getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 
 		if (foundArticle == null) {
 			System.out.printf("%d번 게시글을 찾을 수 없습니다.\n", id);
@@ -200,40 +184,14 @@ public class ArticleController extends Controller {
 
 	}
 
-	private int getArticleIndexById(int id) {
-
-		int i = 0;
-
-		for (Article article : articles) {
-			if (article.id == id) {
-				return i;
-			}
-
-			i++;
-		}
-
-		return -1;
-	}
-
-	private Article getArticleById(int id) {
-
-		int index = getArticleIndexById(id);
-
-		if (index != -1) {
-			return articles.get(index);
-		}
-
-		return null;
-	}
-
 	public void makeTestData() {
 		System.out.println("테스트를 위한 게시글 데이터를 생성합니다.");
 
-		Container.articleDao
+		articleService
 				.add(new Article(Container.articleDao.getNewId(), Util.getCurrentDate(), 1, "test1", "test1", 11));
-		Container.articleDao
+		articleService
 				.add(new Article(Container.articleDao.getNewId(), Util.getCurrentDate(), 2, "test2", "test2", 21));
-		Container.articleDao
+		articleService
 				.add(new Article(Container.articleDao.getNewId(), Util.getCurrentDate(), 3, "test3", "test2", 31));
 	}
 }
