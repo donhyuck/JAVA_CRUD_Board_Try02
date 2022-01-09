@@ -98,7 +98,7 @@ public class ArticleController extends Controller {
 
 		Article article = new Article(id, regDate, loginedMember.id, title, body);
 
-		articleService.add(article);
+		articleService.write(article);
 
 		System.out.printf("%d번 글이 등록되었습니다.\n", id);
 
@@ -187,11 +187,8 @@ public class ArticleController extends Controller {
 	public void makeTestData() {
 		System.out.println("테스트를 위한 게시글 데이터를 생성합니다.");
 
-		articleService
-				.add(new Article(Container.articleDao.getNewId(), Util.getCurrentDate(), 1, "test1", "test1", 11));
-		articleService
-				.add(new Article(Container.articleDao.getNewId(), Util.getCurrentDate(), 2, "test2", "test2", 21));
-		articleService
-				.add(new Article(Container.articleDao.getNewId(), Util.getCurrentDate(), 3, "test3", "test2", 31));
+		articleService.write(new Article(articleService.getNewId(), Util.getCurrentDate(), 1, "test1", "test1", 11));
+		articleService.write(new Article(articleService.getNewId(), Util.getCurrentDate(), 2, "test2", "test2", 21));
+		articleService.write(new Article(articleService.getNewId(), Util.getCurrentDate(), 3, "test3", "test2", 31));
 	}
 }

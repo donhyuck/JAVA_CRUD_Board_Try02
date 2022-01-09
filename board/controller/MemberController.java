@@ -1,22 +1,22 @@
 package board.controller;
 
-import java.util.List;
 import java.util.Scanner;
 
 import board.container.Container;
 import board.dto.Member;
+import board.service.MemberService;
 import board.util.Util;
 
 public class MemberController extends Controller {
 
 	private Scanner sc;
-	private List<Member> members;
 	private String command;
 	private String actionMethodName;
+	private MemberService memberService;
 
 	public MemberController(Scanner sc) {
 		this.sc = sc;
-		members = Container.memberDao.members;
+		memberService = Container.memberService;
 	}
 
 	public void doAction(String command, String actionMethodName) {
@@ -77,7 +77,7 @@ public class MemberController extends Controller {
 			System.out.print("로그인 아이디 : ");
 			loginId = sc.nextLine();
 
-			member = getMemberByLoginId(loginId);
+			member = memberService.getMemberByLoginId(loginId);
 
 			if (member == null) {
 				System.out.println("비밀번호를 확인해주세요.");
@@ -189,36 +189,20 @@ public class MemberController extends Controller {
 			break;
 		}
 
-		int id = Container.memberDao.getNewId();
+		int id = memberService.getNewId();
 		String regDate = Util.getCurrentDate();
 
 		Member member = new Member(id, regDate, loginId, loginPw, name);
 
-		Container.memberDao.add(member);
+		memberService.join(member);
 
 		System.out.printf("%s님 회원가입이 완료되었습니다.\n", name);
 
 	}
 
-	private int getMemberIndexByLoginId(String loginId) {
-
-		int i = 0;
-
-		for (Member member : members) {
-
-			if (member.loginId.equals(loginId)) {
-				return i;
-			}
-
-			i++;
-		}
-
-		return -1;
-	}
-
 	private boolean isJoinableLoginedId(String loginId) {
 
-		int index = getMemberIndexByLoginId(loginId);
+		int index = memberService.getMemberIndexByLoginId(loginId);
 
 		if (index == -1) {
 			return true;
@@ -227,26 +211,12 @@ public class MemberController extends Controller {
 		return false;
 	}
 
-	private Member getMemberByLoginId(String loginId) {
-
-		int index = getMemberIndexByLoginId(loginId);
-
-		if (index == -1) {
-			return null;
-		}
-
-		return members.get(index);
-	}
-
 	public void makeTestData() {
 		System.out.println("테스트를 위한 회원 데이터를 생성합니다.");
 
-		Container.memberDao
-				.add(new Member(Container.memberDao.getNewId(), Util.getCurrentDate(), "admin", "admin", "관리자"));
-		Container.memberDao
-				.add(new Member(Container.memberDao.getNewId(), Util.getCurrentDate(), "test1", "test1", "홍길동"));
-		Container.memberDao
-				.add(new Member(Container.memberDao.getNewId(), Util.getCurrentDate(), "test2", "test2", "성춘향"));
+		memberService.join(new Member(memberService.getNewId(), Util.getCurrentDate(), "admin", "admin", "관리자"));
+		memberService.join(new Member(memberService.getNewId(), Util.getCurrentDate(), "test1", "test1", "홍길동"));
+		memberService.join(new Member(memberService.getNewId(), Util.getCurrentDate(), "test2", "test2", "성춘향"));
 	}
 
 }

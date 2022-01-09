@@ -30,7 +30,7 @@ public class ArticleService {
 		return articleDao.getNewId();
 	}
 
-	public void add(Article article) {
+	public void write(Article article) {
 		articleDao.add(article);
 	}
 
