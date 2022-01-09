@@ -1,9 +1,9 @@
 package board.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import board.container.Container;
 import board.dto.Member;
 import board.util.Util;
 
@@ -16,7 +16,7 @@ public class MemberController extends Controller {
 
 	public MemberController(Scanner sc) {
 		this.sc = sc;
-		members = new ArrayList<>();
+		members = Container.memberDao.members;
 	}
 
 	public void doAction(String command, String actionMethodName) {
@@ -80,7 +80,7 @@ public class MemberController extends Controller {
 			member = getMemberByLoginId(loginId);
 
 			if (member == null) {
-				System.out.println("해당 회원의 가입정보가 없습니다.");
+				System.out.println("비밀번호를 확인해주세요.");
 				blockCnt++;
 
 				if (blockCnt > 3) {
@@ -89,6 +89,7 @@ public class MemberController extends Controller {
 				}
 				continue;
 			}
+
 			break;
 		}
 

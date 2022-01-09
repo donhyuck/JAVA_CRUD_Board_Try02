@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import board.container.Container;
 import board.dto.Article;
+import board.dto.Member;
 import board.util.Util;
 
 public class ArticleController extends Controller {
@@ -16,7 +18,7 @@ public class ArticleController extends Controller {
 
 	public ArticleController(Scanner sc) {
 		this.sc = sc;
-		articles = new ArrayList<>();
+		articles = Container.articleDao.articles;
 	}
 
 	public void doAction(String command, String actionMethodName) {
@@ -78,8 +80,21 @@ public class ArticleController extends Controller {
 		for (int i = forListArticles.size() - 1; i >= 0; i--) {
 
 			Article currentArticle = forListArticles.get(i);
-			System.out.printf(" %d / %s / %d / %s / %d\n", currentArticle.id, currentArticle.regDate,
-					currentArticle.memberId, currentArticle.title, currentArticle.hit);
+
+			// 게시글 목록에 작성자의 이름을 표시
+			String writerName = null;
+
+			List<Member> members = Container.memberDao.members;
+
+			for (Member member : members) {
+				if (currentArticle.memberId == member.id) {
+					writerName = member.name;
+					break;
+				}
+			}
+
+			System.out.printf(" %d / %s / %s / %s / %d\n", currentArticle.id, currentArticle.regDate, writerName,
+					currentArticle.title, currentArticle.hit);
 		}
 
 	}
