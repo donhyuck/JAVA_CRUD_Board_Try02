@@ -81,7 +81,6 @@ public class ArticleController extends Controller {
 
 			Article currentArticle = forListArticles.get(i);
 
-			// 게시글 목록에 작성자의 이름을 표시
 			String writerName = null;
 
 			List<Member> members = Container.memberDao.members;
@@ -103,7 +102,7 @@ public class ArticleController extends Controller {
 
 		System.out.println("== 게시글 작성 ==");
 
-		int id = articles.size() + 1;
+		int id = Container.articleDao.getNewId();
 
 		System.out.print("글 제목 : ");
 		String title = sc.nextLine();
@@ -115,7 +114,7 @@ public class ArticleController extends Controller {
 
 		Article article = new Article(id, regDate, loginedMember.id, title, body);
 
-		articles.add(article);
+		Container.articleDao.add(article);
 
 		System.out.printf("%d번 글이 등록되었습니다.\n", id);
 
@@ -229,8 +228,12 @@ public class ArticleController extends Controller {
 
 	public void makeTestData() {
 		System.out.println("테스트를 위한 게시글 데이터를 생성합니다.");
-		articles.add(new Article(1, Util.getCurrentDate(), 1, "test1", "test1", 11));
-		articles.add(new Article(2, Util.getCurrentDate(), 2, "test2", "test2", 21));
-		articles.add(new Article(3, Util.getCurrentDate(), 3, "test3", "test2", 31));
+
+		Container.articleDao
+				.add(new Article(Container.articleDao.getNewId(), Util.getCurrentDate(), 1, "test1", "test1", 11));
+		Container.articleDao
+				.add(new Article(Container.articleDao.getNewId(), Util.getCurrentDate(), 2, "test2", "test2", 21));
+		Container.articleDao
+				.add(new Article(Container.articleDao.getNewId(), Util.getCurrentDate(), 3, "test3", "test2", 31));
 	}
 }
