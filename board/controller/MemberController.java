@@ -37,7 +37,7 @@ public class MemberController extends Controller {
 			showWhoAmI();
 			break;
 		default:
-			System.out.println("Á¸ÀçÇÏÁö ¾Ê´Â ¸í·É¾îÀÔ´Ï´Ù.");
+			System.out.println("ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ëª…ë ¹ì–´ì…ë‹ˆë‹¤.");
 			break;
 		}
 
@@ -45,7 +45,7 @@ public class MemberController extends Controller {
 
 	private void doLogout() {
 
-		System.out.printf("%s´Ô ·Î±×¾Æ¿ôµÇ¾ú½À´Ï´Ù.\n", loginedMember.name);
+		System.out.printf("%së‹˜ ë¡œê·¸ì•„ì›ƒë˜ì—ˆìŠµë‹ˆë‹¤.\n", loginedMember.name);
 		loginedMember = null;
 
 	}
@@ -53,19 +53,19 @@ public class MemberController extends Controller {
 	private void showWhoAmI() {
 
 		if (loginedMember == null) {
-			System.out.println("·Î±×¾Æ¿ô »óÅÂÀÔ´Ï´Ù.");
+			System.out.println("ë¡œê·¸ì•„ì›ƒ ìƒíƒœì…ë‹ˆë‹¤.");
 			return;
 		}
 
-		System.out.println("== ÇöÀç »óÅÂº¸±â ==");
-		System.out.printf("·Î±×ÀÎ ¾ÆÀÌµğ : %s\n", loginedMember.loginId);
-		System.out.printf("ÀÌ¸§ : %s\n", loginedMember.name);
+		System.out.println("== í˜„ì¬ ìƒíƒœë³´ê¸° ==");
+		System.out.printf("ë¡œê·¸ì¸ ì•„ì´ë”” : %s\n", loginedMember.loginId);
+		System.out.printf("ì´ë¦„ : %s\n", loginedMember.name);
 
 	}
 
 	private void doLogin() {
 
-		System.out.println("== È¸¿ø ·Î±×ÀÎ ==");
+		System.out.println("== íšŒì› ë¡œê·¸ì¸ ==");
 
 		String loginId;
 		String loginPw;
@@ -74,17 +74,17 @@ public class MemberController extends Controller {
 
 		while (true) {
 
-			System.out.print("·Î±×ÀÎ ¾ÆÀÌµğ : ");
+			System.out.print("ë¡œê·¸ì¸ ì•„ì´ë”” : ");
 			loginId = sc.nextLine();
 
 			member = memberService.getMemberByLoginId(loginId);
 
 			if (member == null) {
-				System.out.println("ºñ¹Ğ¹øÈ£¸¦ È®ÀÎÇØÁÖ¼¼¿ä.");
+				System.out.println("ë¹„ë°€ë²ˆí˜¸ë¥¼ í™•ì¸í•´ì£¼ì„¸ìš”.");
 				blockCnt++;
 
 				if (blockCnt > 3) {
-					System.out.println("ÀÔ·ÂÈ½¼ö°¡ ÃÊ°úµÇ¾ú½À´Ï´Ù.");
+					System.out.println("ì…ë ¥íšŸìˆ˜ê°€ ì´ˆê³¼ë˜ì—ˆìŠµë‹ˆë‹¤.");
 					return;
 				}
 				continue;
@@ -95,15 +95,15 @@ public class MemberController extends Controller {
 
 		blockCnt = 0;
 		while (true) {
-			System.out.print("·Î±×ÀÎ ºñ¹Ğ¹øÈ£ : ");
+			System.out.print("ë¡œê·¸ì¸ ë¹„ë°€ë²ˆí˜¸ : ");
 			loginPw = sc.nextLine();
 
 			if (member.loginPw.equals(loginPw) == false) {
-				System.out.println("ºñ¹Ğ¹øÈ£¸¦ È®ÀÎÇØÁÖ¼¼¿ä.");
+				System.out.println("ë¹„ë°€ë²ˆí˜¸ë¥¼ í™•ì¸í•´ì£¼ì„¸ìš”.");
 				blockCnt++;
 
 				if (blockCnt > 3) {
-					System.out.println("ÀÔ·ÂÈ½¼ö°¡ ÃÊ°úµÇ¾ú½À´Ï´Ù.");
+					System.out.println("ì…ë ¥íšŸìˆ˜ê°€ ì´ˆê³¼ë˜ì—ˆìŠµë‹ˆë‹¤.");
 					return;
 				}
 				continue;
@@ -113,19 +113,19 @@ public class MemberController extends Controller {
 		}
 
 		loginedMember = member;
-		System.out.printf("%s´Ô ·Î±×ÀÎµÇ¾ú½À´Ï´Ù.\n", loginedMember.name);
+		System.out.printf("%së‹˜ ë¡œê·¸ì¸ë˜ì—ˆìŠµë‹ˆë‹¤.\n", loginedMember.name);
 
 	}
 
 	private void doJoin() {
 
-		System.out.println("== È¸¿ø °¡ÀÔ ==");
+		System.out.println("== íšŒì› ê°€ì… ==");
 
 		String loginId = null;
 		int blockCnt = 0;
 
 		while (true) {
-			System.out.print("·Î±×ÀÎ ¾ÆÀÌµğ : ");
+			System.out.print("ë¡œê·¸ì¸ ì•„ì´ë”” : ");
 			loginId = sc.nextLine();
 
 			if (loginId.length() == 0) {
@@ -133,11 +133,11 @@ public class MemberController extends Controller {
 			}
 
 			if (isJoinableLoginedId(loginId) == false) {
-				System.out.printf("%s´Â ÀÌ¹Ì »ç¿ëÁßÀÎ ¾ÆÀÌµğÀÔ´Ï´Ù.\n", loginId);
+				System.out.printf("%sëŠ” ì´ë¯¸ ì‚¬ìš©ì¤‘ì¸ ì•„ì´ë””ì…ë‹ˆë‹¤.\n", loginId);
 				blockCnt++;
 
 				if (blockCnt > 3) {
-					System.out.println("ÀÔ·ÂÈ½¼ö°¡ ÃÊ°úµÇ¾ú½À´Ï´Ù.");
+					System.out.println("ì…ë ¥íšŸìˆ˜ê°€ ì´ˆê³¼ë˜ì—ˆìŠµë‹ˆë‹¤.");
 					return;
 				}
 
@@ -152,22 +152,22 @@ public class MemberController extends Controller {
 		blockCnt = 0;
 
 		while (true) {
-			System.out.print("·Î±×ÀÎ ºñ¹Ğ¹øÈ£ : ");
+			System.out.print("ë¡œê·¸ì¸ ë¹„ë°€ë²ˆí˜¸ : ");
 			loginPw = sc.nextLine();
 
 			if (loginPw.length() == 0) {
 				continue;
 			}
 
-			System.out.print("·Î±×ÀÎ ºñ¹Ğ¹øÈ£ È®ÀÎ : ");
+			System.out.print("ë¡œê·¸ì¸ ë¹„ë°€ë²ˆí˜¸ í™•ì¸ : ");
 			loginPwConfirm = sc.nextLine();
 
 			if (loginPwConfirm.equals(loginPw) == false) {
-				System.out.println("ºñ¹Ğ¹øÈ£¸¦ ´Ù½ÃÀÔ·ÂÇØÁÖ¼¼¿ä.");
+				System.out.println("ë¹„ë°€ë²ˆí˜¸ë¥¼ ë‹¤ì‹œì…ë ¥í•´ì£¼ì„¸ìš”.");
 				blockCnt++;
 
 				if (blockCnt > 3) {
-					System.out.println("ÀÔ·ÂÈ½¼ö°¡ ÃÊ°úµÇ¾ú½À´Ï´Ù.");
+					System.out.println("ì…ë ¥íšŸìˆ˜ê°€ ì´ˆê³¼ë˜ì—ˆìŠµë‹ˆë‹¤.");
 					return;
 				}
 
@@ -179,7 +179,7 @@ public class MemberController extends Controller {
 
 		String name;
 		while (true) {
-			System.out.print("ÀÌ¸§ : ");
+			System.out.print("ì´ë¦„ : ");
 			name = sc.nextLine();
 
 			if (name.length() == 0) {
@@ -196,7 +196,7 @@ public class MemberController extends Controller {
 
 		memberService.join(member);
 
-		System.out.printf("%s´Ô È¸¿ø°¡ÀÔÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.\n", name);
+		System.out.printf("%së‹˜ íšŒì›ê°€ì…ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.\n", name);
 
 	}
 
@@ -212,11 +212,11 @@ public class MemberController extends Controller {
 	}
 
 	public void makeTestData() {
-		System.out.println("Å×½ºÆ®¸¦ À§ÇÑ È¸¿ø µ¥ÀÌÅÍ¸¦ »ı¼ºÇÕ´Ï´Ù.");
+		System.out.println("í…ŒìŠ¤íŠ¸ë¥¼ ìœ„í•œ íšŒì› ë°ì´í„°ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.");
 
-		memberService.join(new Member(memberService.getNewId(), Util.getCurrentDate(), "admin", "admin", "°ü¸®ÀÚ"));
-		memberService.join(new Member(memberService.getNewId(), Util.getCurrentDate(), "test1", "test1", "È«±æµ¿"));
-		memberService.join(new Member(memberService.getNewId(), Util.getCurrentDate(), "test2", "test2", "¼ºÃáÇâ"));
+		memberService.join(new Member(memberService.getNewId(), Util.getCurrentDate(), "admin", "admin", "ê´€ë¦¬ì"));
+		memberService.join(new Member(memberService.getNewId(), Util.getCurrentDate(), "test1", "test1", "í™ê¸¸ë™"));
+		memberService.join(new Member(memberService.getNewId(), Util.getCurrentDate(), "test2", "test2", "ì„±ì¶˜í–¥"));
 	}
 
 }

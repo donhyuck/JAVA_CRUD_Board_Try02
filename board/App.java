@@ -10,7 +10,7 @@ import board.controller.MemberController;
 public class App {
 
 	public void start() {
-		System.out.println("== ÇÁ·Î±×·¥ ½ÃÀÛ ==");
+		System.out.println("== í”„ë¡œê·¸ë¨ ì‹œì‘ ==");
 
 		Scanner sc = new Scanner(System.in);
 
@@ -23,7 +23,7 @@ public class App {
 		exportController.makeTestData();
 
 		while (true) {
-			System.out.print("¸í·É¾î : ");
+			System.out.print("ëª…ë ¹ì–´ : ");
 			String command = sc.nextLine();
 
 			command.trim();
@@ -33,14 +33,14 @@ public class App {
 			}
 
 			if (command.equals("system exit")) {
-				System.out.println("== ÇÁ·Î±×·¥ Á¾·á ==");
+				System.out.println("== í”„ë¡œê·¸ë¨ ì¢…ë£Œ ==");
 				break;
 			}
 
 			String[] commandBits = command.split(" ");
 
 			if (commandBits.length == 1) {
-				System.out.println("Á¸ÀçÇÏÁö ¾Ê´Â ¸í·É¾îÀÔ´Ï´Ù.");
+				System.out.println("ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ëª…ë ¹ì–´ì…ë‹ˆë‹¤.");
 				continue;
 			}
 
@@ -59,11 +59,11 @@ public class App {
 				controller = exportController;
 
 			} else {
-				System.out.printf("%s´Â Á¸ÀçÇÏÁö ¾Ê´Â ¸í·É¾îÀÔ´Ï´Ù.\n", command);
+				System.out.printf("%sëŠ” ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ëª…ë ¹ì–´ì…ë‹ˆë‹¤.\n", command);
 				continue;
 			}
 
-			// ·Î±×ÀÎ, ·Î±×¾Æ¿ô Ã¼Å©¸¦ ¸í·É¾î¸¦ ¹ŞÀ¸¸é¼­ ¼öÇàÇÑ´Ù.
+			// ë¡œê·¸ì¸, ë¡œê·¸ì•„ì›ƒ ì²´í¬ë¥¼ ëª…ë ¹ì–´ë¥¼ ë°›ìœ¼ë©´ì„œ ìˆ˜í–‰í•œë‹¤.
 			String actionName = controllerName + "/" + actionMethodName;
 
 			switch (actionName) {
@@ -72,7 +72,7 @@ public class App {
 			case "article/modify":
 			case "member/logout":
 				if (Controller.isLogined() == false) {
-					System.out.println("·Î±×ÀÎ ÈÄ ÀÌ¿ëÇØÁÖ¼¼¿ä.");
+					System.out.println("ë¡œê·¸ì¸ í›„ ì´ìš©í•´ì£¼ì„¸ìš”.");
 					continue;
 				}
 				break;
@@ -82,7 +82,7 @@ public class App {
 			case "member/join":
 			case "member/login":
 				if (Controller.isLogined() == true) {
-					System.out.println("·Î±×¾Æ¿ô ÈÄ ÀÌ¿ëÇØÁÖ¼¼¿ä.");
+					System.out.println("ë¡œê·¸ì•„ì›ƒ í›„ ì´ìš©í•´ì£¼ì„¸ìš”.");
 					continue;
 				}
 				break;

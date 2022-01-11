@@ -26,14 +26,15 @@ public class ExportController extends Controller {
 			dohtml();
 			break;
 		default:
-			System.out.println("Á¸ÀçÇÏÁö ¾Ê´Â ¸í·É¾îÀÔ´Ï´Ù.");
+			System.out.println("ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ëª…ë ¹ì–´ì…ë‹ˆë‹¤.");
 			break;
 		}
 
 	}
 
 	private void dohtml() {
-		System.out.println("html »ı¼ºÀ» ½ÃÀÛÇÕ´Ï´Ù.");
+		System.out.println("html ìƒì„±ì„ ì‹œì‘í•©ë‹ˆë‹¤.");
+		exportService.makeHtml();
 	}
 
 	@Override

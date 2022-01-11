@@ -5,8 +5,8 @@ import java.util.Scanner;
 
 import board.container.Container;
 import board.dto.Article;
-import board.dto.Member;
 import board.service.ArticleService;
+import board.service.MemberService;
 import board.util.Util;
 
 public class ArticleController extends Controller {
@@ -15,10 +15,12 @@ public class ArticleController extends Controller {
 	private String command;
 	private String actionMethodName;
 	private ArticleService articleService;
+	private MemberService memberService;
 
 	public ArticleController(Scanner sc) {
 		this.sc = sc;
 		articleService = Container.articleService;
+		memberService = Container.memberService;
 	}
 
 	public void doAction(String command, String actionMethodName) {
@@ -42,7 +44,7 @@ public class ArticleController extends Controller {
 			showDetail();
 			break;
 		default:
-			System.out.println("Á¸ÀçÇÏÁö ¾Ê´Â ¸í·É¾îÀÔ´Ï´Ù.");
+			System.out.println("ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ëª…ë ¹ì–´ì…ë‹ˆë‹¤.");
 			break;
 		}
 	}
@@ -54,27 +56,18 @@ public class ArticleController extends Controller {
 		List<Article> forPrintArticles = articleService.getForPrintArticles(searchKeyword);
 
 		if (forPrintArticles.size() == 0) {
-			System.out.println("°Ë»ö°á°ú°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.");
+			System.out.println("ê²€ìƒ‰ê²°ê³¼ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
 			return;
 		}
 
-		System.out.println("== °Ô½Ã±Û ¸ñ·Ï ==");
-		System.out.println("¹øÈ£ /   ÀÛ¼ºÀÏ   / ÀÛ¼ºÀÚ / Á¦¸ñ / Á¶È¸¼ö");
+		System.out.println("== ê²Œì‹œê¸€ ëª©ë¡ ==");
+		System.out.println("ë²ˆí˜¸ /   ì‘ì„±ì¼   / ì‘ì„±ì / ì œëª© / ì¡°íšŒìˆ˜");
 
 		for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
 
 			Article currentArticle = forPrintArticles.get(i);
 
-			String writerName = null;
-
-			List<Member> members = Container.memberDao.members;
-
-			for (Member member : members) {
-				if (currentArticle.memberId == member.id) {
-					writerName = member.name;
-					break;
-				}
-			}
+			String writerName = memberService.getMemberNameById(currentArticle.id);
 
 			System.out.printf(" %d / %s / %s / %s / %d\n", currentArticle.id, currentArticle.regDate, writerName,
 					currentArticle.title, currentArticle.hit);
@@ -84,14 +77,14 @@ public class ArticleController extends Controller {
 
 	private void doWrite() {
 
-		System.out.println("== °Ô½Ã±Û ÀÛ¼º ==");
+		System.out.println("== ê²Œì‹œê¸€ ì‘ì„± ==");
 
 		int id = articleService.getNewId();
 
-		System.out.print("±Û Á¦¸ñ : ");
+		System.out.print("ê¸€ ì œëª© : ");
 		String title = sc.nextLine();
 
-		System.out.print("±Û ³»¿ë : ");
+		System.out.print("ê¸€ ë‚´ìš© : ");
 		String body = sc.nextLine();
 
 		String regDate = Util.getCurrentDate();
@@ -100,7 +93,7 @@ public class ArticleController extends Controller {
 
 		articleService.write(article);
 
-		System.out.printf("%d¹ø ±ÛÀÌ µî·ÏµÇ¾ú½À´Ï´Ù.\n", id);
+		System.out.printf("%dë²ˆ ê¸€ì´ ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤.\n", id);
 
 	}
 
@@ -112,27 +105,27 @@ public class ArticleController extends Controller {
 		Article foundArticle = articleService.getArticleById(id);
 
 		if (foundArticle == null) {
-			System.out.printf("%d¹ø °Ô½Ã±ÛÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù.\n", id);
+			System.out.printf("%dë²ˆ ê²Œì‹œê¸€ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n", id);
 			return;
 		}
 
 		if (foundArticle.memberId != loginedMember.id) {
-			System.out.println("ÇØ´ç °Ô½Ã±Û¿¡ ´ëÇÑ ±ÏÇÑÀÌ ¾ø½À´Ï´Ù.");
+			System.out.println("í•´ë‹¹ ê²Œì‹œê¸€ì— ëŒ€í•œ ê·„í•œì´ ì—†ìŠµë‹ˆë‹¤.");
 			return;
 		}
 
-		System.out.println("== °Ô½Ã±Û ¼öÁ¤ ==");
+		System.out.println("== ê²Œì‹œê¸€ ìˆ˜ì • ==");
 
-		System.out.print("»õ Á¦¸ñ : ");
+		System.out.print("ìƒˆ ì œëª© : ");
 		String title = sc.nextLine();
 
-		System.out.print("»õ ³»¿ë : ");
+		System.out.print("ìƒˆ ë‚´ìš© : ");
 		String body = sc.nextLine();
 
 		foundArticle.title = title;
 		foundArticle.body = body;
 
-		System.out.printf("%d¹ø °Ô½Ã±ÛÀÌ ¼öÁ¤µÇ¾ú½À´Ï´Ù.\n", id);
+		System.out.printf("%dë²ˆ ê²Œì‹œê¸€ì´ ìˆ˜ì •ë˜ì—ˆìŠµë‹ˆë‹¤.\n", id);
 
 	}
 
@@ -144,18 +137,18 @@ public class ArticleController extends Controller {
 		Article foundArticle = articleService.getArticleById(id);
 
 		if (foundArticle == null) {
-			System.out.printf("%d¹ø °Ô½Ã±ÛÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù.\n", id);
+			System.out.printf("%dë²ˆ ê²Œì‹œê¸€ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n", id);
 			return;
 		}
 
 		if (foundArticle.memberId != loginedMember.id) {
-			System.out.println("ÇØ´ç °Ô½Ã±Û¿¡ ´ëÇÑ ±ÏÇÑÀÌ ¾ø½À´Ï´Ù.");
+			System.out.println("í•´ë‹¹ ê²Œì‹œê¸€ì— ëŒ€í•œ ê·„í•œì´ ì—†ìŠµë‹ˆë‹¤.");
 			return;
 		}
 
 		articleService.remove(foundArticle);
 
-		System.out.printf("%d¹ø °Ô½Ã±ÛÀÌ »èÁ¦µÇ¾ú½À´Ï´Ù.\n", id);
+		System.out.printf("%dë²ˆ ê²Œì‹œê¸€ì´ ì‚­ì œë˜ì—ˆìŠµë‹ˆë‹¤.\n", id);
 
 	}
 
@@ -167,25 +160,25 @@ public class ArticleController extends Controller {
 		Article foundArticle = articleService.getArticleById(id);
 
 		if (foundArticle == null) {
-			System.out.printf("%d¹ø °Ô½Ã±ÛÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù.\n", id);
+			System.out.printf("%dë²ˆ ê²Œì‹œê¸€ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n", id);
 			return;
 		}
 
 		foundArticle.increaseHit();
 
-		System.out.println("== °Ô½Ã±Û »ó¼¼º¸±â ==");
+		System.out.println("== ê²Œì‹œê¸€ ìƒì„¸ë³´ê¸° ==");
 
-		System.out.printf("¹ø È£ : %d\n", foundArticle.id);
-		System.out.printf("ÀÛ¼ºÀÏ : %s\n", foundArticle.regDate);
-		System.out.printf("ÀÛ¼ºÀÚ : %d\n", foundArticle.memberId);
-		System.out.printf("Á¦ ¸ñ : %s\n", foundArticle.title);
-		System.out.printf("³» ¿ë : %s\n", foundArticle.body);
-		System.out.printf("Á¶È¸¼ö : %d\n", foundArticle.hit);
+		System.out.printf("ë²ˆ í˜¸ : %d\n", foundArticle.id);
+		System.out.printf("ì‘ì„±ì¼ : %s\n", foundArticle.regDate);
+		System.out.printf("ì‘ì„±ì : %d\n", foundArticle.memberId);
+		System.out.printf("ì œ ëª© : %s\n", foundArticle.title);
+		System.out.printf("ë‚´ ìš© : %s\n", foundArticle.body);
+		System.out.printf("ì¡°íšŒìˆ˜ : %d\n", foundArticle.hit);
 
 	}
 
 	public void makeTestData() {
-		System.out.println("Å×½ºÆ®¸¦ À§ÇÑ °Ô½Ã±Û µ¥ÀÌÅÍ¸¦ »ı¼ºÇÕ´Ï´Ù.");
+		System.out.println("í…ŒìŠ¤íŠ¸ë¥¼ ìœ„í•œ ê²Œì‹œê¸€ ë°ì´í„°ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.");
 
 		articleService.write(new Article(articleService.getNewId(), Util.getCurrentDate(), 1, "test1", "test1", 11));
 		articleService.write(new Article(articleService.getNewId(), Util.getCurrentDate(), 2, "test2", "test2", 21));
